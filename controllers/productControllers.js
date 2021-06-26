@@ -1,25 +1,51 @@
-let products = require("../data");
-const slugify = require("slugify");
+const { product } = require("../db/models");
 
-exports.productList = (req, res) => {
-  res.json(products);
+exports.productList = async (req, res) => {
+  try {
+    const products = await product.findAll({
+      attributes: {
+        exclude: ["updatedAt", "createdAt"],
+      },
+    });
+
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
-exports.productCreate = (req, res) => {
-  const id = products[products.length - 1].id + 1;
-  const slug = slugify(
-    req.body.name.toLowerCase()
-  ); /*const slug=slugify(req.body.name ,{lower:true})*/
-  const newProduct = { id: id, slug: slug, ...req.body };
-  products.push(newProduct);
-  res.status(201).json(newProduct);
+exports.productCreate = async (req, res) => {
+  try {
+    const newProduct = await product.create(req.body); //i want to create req.body
+    res.status(201).json(newProduct);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
-exports.productDelete = (req, res) => {
+exports.productDelete = async (req, res) => {
   const productId = req.params.productId; /* const {productId} =req.params;*/
-  const productFound = products.find((product) => product.id === +productId);
-  if (productFound) {
-    products = products.filter((product) => product !== productFound);
-    res.status(204).end();
-  } else {
-    res.status(404).json({ message: "product id does not exist" });
+  try {
+    const foundProduct = await product.findByPk(productId); //i want to create req.body
+    if (foundProduct) {
+      await foundProduct.destroy(); //it will destroy the row(object)
+      res.status(204).end;
+    } else {
+      res.status(404).json({ message: "product doesn't exist" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+exports.productUpdate = async (req, res) => {
+  const productId = req.params.productId; /* const {productId} =req.params;*/
+  try {
+    const foundProduct = await product.findByPk(productId); //i want to create req.body
+    if (foundProduct) {
+      await foundProduct.update(req.body); //it will destroy the row(object)
+      res.status(204).end;
+    } else {
+      res.status(404).json({ message: "product doesn't exist" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
