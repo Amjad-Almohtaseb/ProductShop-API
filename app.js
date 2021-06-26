@@ -7,6 +7,15 @@ app.use(express.json());
 app.use("/products", productsRoutes);
 //db.sequelize.authenticate(); //only used to check that i fill data correctly in config.json
 db.sequelize.sync();
+
+app.use((err, req, res, next) => {
+  res.status(err.status || 500).json({
+    message: err.message || "Internal Server Error",
+  });
+});
+app.use((req, res, next) => {
+  res.status(404).json({ message: "Path not found" });
+});
 app.listen(8000, () => {
   console.log("The application is running on localhost:8000");
 });

@@ -1,6 +1,15 @@
 const { product } = require("../db/models");
+exports.productFetch = async (productId, next) => {
+  try {
+    const foundProduct = await product.findByPk(productId);
 
-exports.productList = async (req, res) => {
+    return foundProduct;
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.productList = async (req, res, next) => {
   try {
     const products = await product.findAll({
       attributes: {
@@ -10,42 +19,31 @@ exports.productList = async (req, res) => {
 
     res.json(products);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error);
   }
 };
-exports.productCreate = async (req, res) => {
+exports.productCreate = async (req, res, next) => {
   try {
     const newProduct = await product.create(req.body); //i want to create req.body
     res.status(201).json(newProduct);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error);
   }
 };
-exports.productDelete = async (req, res) => {
-  const productId = req.params.productId; /* const {productId} =req.params;*/
+exports.productDelete = async (req, res, next) => {
   try {
-    const foundProduct = await product.findByPk(productId); //i want to create req.body
-    if (foundProduct) {
-      await foundProduct.destroy(); //it will destroy the row(object)
-      res.status(204).end;
-    } else {
-      res.status(404).json({ message: "product doesn't exist" });
-    }
+    await req.product.destroy(); //it will destroy the row(object)
+    res.status(204).end();
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error);
   }
 };
-exports.productUpdate = async (req, res) => {
-  const productId = req.params.productId; /* const {productId} =req.params;*/
+exports.productUpdate = async (req, res, next) => {
+  console.log("hi");
   try {
-    const foundProduct = await product.findByPk(productId); //i want to create req.body
-    if (foundProduct) {
-      await foundProduct.update(req.body); //it will destroy the row(object)
-      res.status(204).end;
-    } else {
-      res.status(404).json({ message: "product doesn't exist" });
-    }
+    await req.product.update(req.body); //it will destroy the row(object)
+    res.status(204).end();
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error);
   }
 };
