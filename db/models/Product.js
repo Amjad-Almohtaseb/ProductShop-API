@@ -1,22 +1,20 @@
+const SequelizeSlugify = require("sequelize-slugify");
 module.exports = (sequelize, DataTypes) => {
-  const product = sequelize.define("product", {
-    name: {
+  const Product = sequelize.define("Product", {
+    name: { type: DataTypes.STRING, allowNull: false, unique: true },
+
+    price: { type: DataTypes.INTEGER, defaultValue: 5, validate: { min: 5 } },
+    image: { type: DataTypes.STRING, allowNull: false },
+    description: { type: DataTypes.STRING },
+    slug: {
       type: DataTypes.STRING,
-      allowNull: false,
-    },
-    price: {
-      type: DataTypes.INTEGER,
-      defaultValue: 50,
-      validate: {
-        min: 10,
-      },
-    },
-    image: {
-      type: DataTypes.STRING,
-    },
-    discription: {
-      type: DataTypes.STRING,
+      unique: true,
     },
   });
-  return product;
+
+  SequelizeSlugify.slugifyModel(Product, {
+    source: ["name"],
+  });
+
+  return Product;
 };
