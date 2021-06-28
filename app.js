@@ -1,12 +1,11 @@
 const express = require("express");
 const productsRoutes = require("./routes/productsRoutes");
-const db = require("./db/models");
-
+const cors = require("cors");
 const app = express();
 app.use(express.json());
+app.use(cors());
 app.use("/products", productsRoutes);
 //db.sequelize.authenticate(); //only used to check that i fill data correctly in config.json
-db.sequelize.sync();
 
 app.use((err, req, res, next) => {
   res.status(err.status || 500).json({

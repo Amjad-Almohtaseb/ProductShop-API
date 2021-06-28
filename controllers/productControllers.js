@@ -1,7 +1,7 @@
-const { product } = require("../db/models");
+const { Product } = require("../db/models");
 exports.productFetch = async (productId, next) => {
   try {
-    const foundProduct = await product.findByPk(productId);
+    const foundProduct = await Product.findByPk(productId);
 
     return foundProduct;
   } catch (error) {
@@ -11,7 +11,7 @@ exports.productFetch = async (productId, next) => {
 
 exports.productList = async (req, res, next) => {
   try {
-    const products = await product.findAll({
+    const products = await Product.findAll({
       attributes: {
         exclude: ["updatedAt", "createdAt"],
       },
@@ -24,7 +24,7 @@ exports.productList = async (req, res, next) => {
 };
 exports.productCreate = async (req, res, next) => {
   try {
-    const newProduct = await product.create(req.body); //i want to create req.body
+    const newProduct = await Product.create(req.body); //i want to create req.body
     res.status(201).json(newProduct);
   } catch (error) {
     next(error);
@@ -39,10 +39,9 @@ exports.productDelete = async (req, res, next) => {
   }
 };
 exports.productUpdate = async (req, res, next) => {
-  console.log("hi");
   try {
     await req.product.update(req.body); //it will destroy the row(object)
-    res.status(204).end();
+    res.json(req.product);
   } catch (error) {
     next(error);
   }
