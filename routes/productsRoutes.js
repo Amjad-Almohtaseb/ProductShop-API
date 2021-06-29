@@ -20,7 +20,7 @@ router.param("productId", async (req, res, next, productId) => {
 //Mini Express App
 
 router.get("/", productList);
-router.post("/", productCreate);
+//router.post("/", productCreate);
 router.delete("/:productId", productDelete);
 router.put("/:productId", productUpdate);
 
