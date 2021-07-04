@@ -40,6 +40,9 @@ exports.productDelete = async (req, res, next) => {
 };
 exports.productUpdate = async (req, res, next) => {
   try {
+    if (req.file) {
+      req.body.image = `http://${req.get("host")}/media/${req.file.filename}`;
+    }
     await req.product.update(req.body);
     res.json(req.product);
   } catch (error) {

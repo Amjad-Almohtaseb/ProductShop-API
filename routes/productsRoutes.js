@@ -7,6 +7,8 @@ const {
 } = require("../controllers/productControllers");
 const express = require("express");
 const router = express.Router();
+const upload = require("../media/middleware/multer");
+
 router.param("productId", async (req, res, next, productId) => {
   const product = await productFetch(productId, next);
 
@@ -22,6 +24,8 @@ router.param("productId", async (req, res, next, productId) => {
 router.get("/", productList);
 //router.post("/", productCreate);
 router.delete("/:productId", productDelete);
-router.put("/:productId", productUpdate);
+//when some one make a put req he wiil go here and then will go to upload in multer.js that will call storage and then it
+//will put the image inside media folder.
+router.put("/:productId", upload.single("image"), productUpdate); //image is the name of the field in the model
 
 module.exports = router;
