@@ -1,14 +1,22 @@
 const express = require("express");
 const shopsRoutes = require("./routes/shopRoutes");
 const productsRoutes = require("./routes/productsRoutes");
+const usersRoutes = require("./routes/usersRoutes");
+const passport = require("passport");
+
 const cors = require("cors");
+const { localStrategy } = require("./middleware/passport");
 const app = express();
 
 app.use(express.json());
 app.use(cors());
+//passport setup
+app.use(passport.initialize());
+passport.use(localStrategy);
 app.use("/products", productsRoutes);
 app.use("/shops", shopsRoutes);
 app.use("/media", express.static("media"));
+app.use( usersRoutes);
 
 //db.sequelize.authenticate(); //only used to check that i fill data correctly in config.json
 
