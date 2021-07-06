@@ -6,6 +6,7 @@ const {
   productFetch,
 } = require("../controllers/productControllers");
 const express = require("express");
+const passport = require("passport");
 const router = express.Router();
 const upload = require("../media/middleware/multer");
 
@@ -23,9 +24,18 @@ router.param("productId", async (req, res, next, productId) => {
 
 router.get("/", productList);
 //router.post("/", productCreate);
-router.delete("/:productId", productDelete);
+router.delete(
+  "/:productId",
+  passport.authenticate("jwt", { session: false }),
+  productDelete
+);
 //when some one make a put req he wiil go here and then will go to upload in multer.js that will call storage and then it
 //will put the image inside media folder.
-router.put("/:productId", upload.single("image"), productUpdate); //image is the name of the field in the model
+router.put(
+  "/:productId",
+  passport.authenticate("jwt", { session: false }),
+  upload.single("image"),
+  productUpdate
+); //image is the name of the field in the model
 
 module.exports = router;

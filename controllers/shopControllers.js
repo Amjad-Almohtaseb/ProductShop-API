@@ -30,9 +30,11 @@ exports.shopsList = async (req, res, next) => {
 
 exports.shopsCreate = async (req, res, next) => {
   try {
+    req.body.userId = req.user.id;
     if (req.file) {
       req.body.image = `http://${req.get("host")}/media/${req.file.filename}`;
     }
+
     const newShop = await Shop.create(req.body);
     res.status(201).json(newShop);
   } catch (error) {

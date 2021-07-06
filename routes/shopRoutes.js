@@ -1,6 +1,6 @@
 const express = require("express");
 const upload = require("../media/middleware/multer");
-
+const passport = require("passport");
 const router = express.Router();
 const {
   shopsCreate,
@@ -23,9 +23,20 @@ router.param("shopId", async (req, res, next, shopId) => {
   }
 });
 
-router.post("/:shopId/products", upload.single("image"), productsCreate);
+router.post(
+  "/:shopId/products",
+  passport.authenticate("jwt", { session: false }),
+  upload.single("image"),
+  productsCreate
+);
 
-router.post("/", upload.single("image"), shopsCreate);
+router.post(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+
+  upload.single("image"),
+  shopsCreate
+);
 
 router.get("/", shopsList);
 
