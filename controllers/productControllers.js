@@ -32,6 +32,12 @@ exports.productList = async (req, res, next) => {
 // };
 exports.productDelete = async (req, res, next) => {
   try {
+    if (req.shop.userId !== req.user.id) {
+      throw {
+        status: 401,
+        message: "you can't delete a book that's not yours",
+      };
+    }
     await req.product.destroy();
     res.status(204).end();
   } catch (error) {
@@ -40,6 +46,12 @@ exports.productDelete = async (req, res, next) => {
 };
 exports.productUpdate = async (req, res, next) => {
   try {
+    if (req.shop.userId !== req.user.id) {
+      throw {
+        status: 401,
+        message: "you can't update a book that's not yours",
+      };
+    }
     if (req.file) {
       req.body.image = `http://${req.get("host")}/media/${req.file.filename}`;
     }

@@ -21,12 +21,15 @@ exports.signin = async (req, res, next) => {
   const token = generateToken(req.user);
   res.json({ token });
 };
+
 const generateToken = (user) => {
   const payload = {
+    // i put id and username from model because it is a unique (not nessasry) and i want username to appeare it in FE
     id: user.id,
     username: user.username,
     exp: Date.now() + JWT_EXPIRATION_MS,
   };
+  //library that generate token contain payload and secret key
   const token = jwt.sign(payload, JWT_SECRET);
   return token;
 };

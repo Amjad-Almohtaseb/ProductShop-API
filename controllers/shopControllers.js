@@ -30,6 +30,7 @@ exports.shopsList = async (req, res, next) => {
 
 exports.shopsCreate = async (req, res, next) => {
   try {
+    // i add for body the user id that crete this shop
     req.body.userId = req.user.id;
     if (req.file) {
       req.body.image = `http://${req.get("host")}/media/${req.file.filename}`;
