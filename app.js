@@ -2,6 +2,8 @@ const express = require("express");
 const shopsRoutes = require("./routes/shopRoutes");
 const productsRoutes = require("./routes/productsRoutes");
 const usersRoutes = require("./routes/usersRoutes");
+const ordersRoutes = require("./routes/ordersRoutes");
+
 const passport = require("passport");
 
 const cors = require("cors");
@@ -19,6 +21,7 @@ app.use("/products", productsRoutes);
 app.use("/shops", shopsRoutes);
 app.use("/media", express.static("media"));
 app.use(usersRoutes);
+app.use(ordersRoutes);
 
 //db.sequelize.authenticate(); //only used to check that i fill data correctly in config.json
 

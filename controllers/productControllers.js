@@ -1,3 +1,5 @@
+//index contain db
+
 const { Product } = require("../db/models");
 exports.productFetch = async (productId, next) => {
   try {
