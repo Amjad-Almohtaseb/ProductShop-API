@@ -12,7 +12,7 @@ exports.checkout = async (req, res, next) => {
       products: req.body,
     };
 
-    console.log(finalOrder);
+    //console.log(finalOrder);
 
     res.status(201).json(finalOrder);
   } catch (error) {
