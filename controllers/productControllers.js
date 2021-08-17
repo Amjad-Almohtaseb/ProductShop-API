@@ -18,7 +18,7 @@ exports.productList = async (req, res, next) => {
         exclude: ["updatedAt", "createdAt"],
       },
     });
-
+//test
     res.json(products);
   } catch (error) {
     next(error);
@@ -34,10 +34,11 @@ exports.productList = async (req, res, next) => {
 // };
 exports.productDelete = async (req, res, next) => {
   try {
+    //user can delete product only if he is the owner of the shop
     if (req.shop.userId !== req.user.id) {
       throw {
         status: 401,
-        message: "you can't delete a book that's not yours",
+        message: "you can't delete a product that's not yours",
       };
     }
     await req.product.destroy();

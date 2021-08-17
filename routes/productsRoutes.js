@@ -15,8 +15,8 @@ router.param("productId", async (req, res, next, productId) => {
   const product = await productFetch(productId, next);
 
   if (product) {
-    //to delete or update a product and i want to check if he is the owner
-    //i need the shop and user ,the user is easy to fetch because i will take it from (passport auth)
+    //to delete or update a product  i want to check if he is the owner
+    //so i need the shop and user ,the user is easy to fetch because i will take it from (passport auth)
     //but in this case i dont have the shop but i have the product and inside it i have the shop id
     //and from the shop id i can bring the product and from the product i can git the user id.
     const shop = await fetchShop(product.shopId, next);
